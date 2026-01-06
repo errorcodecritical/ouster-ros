@@ -835,11 +835,15 @@ void OusterSensor::stop_sensor_connection_thread() {
 }
 
 void OusterSensor::on_lidar_packet_msg(const LidarPacket&) {
+    lidar_packet_msg.header.stamp = rclcpp::Time(lidar_packet.host_timestamp); // Added header stamp
+    lidar_packet_msg.header.frame_id = "os_lidar_modified"; // Added frame id
     lidar_packet_msg.buf.swap(lidar_packet.buf);
     lidar_packet_pub->publish(lidar_packet_msg);
 }
 
 void OusterSensor::on_imu_packet_msg(const ImuPacket&) {
+    imu_packet_msg.header.stamp = rclcpp::Time(imu_packet.host_timestamp); // Added header stamp
+    imu_packet_msg.header.frame_id = "os_imu_modified"; // Added frame id
     imu_packet_msg.buf.swap(imu_packet.buf);
     imu_packet_pub->publish(imu_packet_msg);
 }
